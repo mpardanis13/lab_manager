@@ -65,9 +65,12 @@ group :test do
   gem "selenium-webdriver"
 end
 
+gem 'bcrypt', '~> 3.1.7' # Για κρυπτογράφηση κωδικών
+gem 'jwt'                # Για το Login Token
+gem 'rswag'              # Για το Swagger Documentation
+
 group :development, :test do
   gem 'rspec-rails'
   gem 'factory_bot_rails'
-  gem 'shoulda-matchers'
-  gem 'database_cleaner'
+  gem 'faker'            # Για τυχαία δεδομένα στα τεστ
 end
