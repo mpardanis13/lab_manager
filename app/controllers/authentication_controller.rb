@@ -7,6 +7,10 @@ class AuthenticationController < ApplicationController
     render json: { message: 'Account created', auth_token: auth_token }, status: :created
   end
 
+  def logout
+  render json: { message: 'Logged out successfully' }
+  end
+
   def authenticate
     user = User.find_by(email: params[:email])
     if user&.authenticate(params[:password])
