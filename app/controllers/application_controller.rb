@@ -1,5 +1,10 @@
-class ApplicationController < ActionController::API
-  before_action :authorize_request
+class ApplicationController < ActionController::Base # Προσοχή: Εδώ βάλε Base αντί για API
+  # Ζητάμε το Token μόνο αν το αίτημα είναι τύπου JSON (δηλαδή για το API)
+  before_action :authorize_request, if: -> { request.format.json? }
+  
+  # Προστασία από CSRF (απαραίτητο για τις φόρμες του Portal)
+  protect_from_forgery with: :null_session, if: -> { request.format.json? }
+
   attr_reader :current_user
 
   private

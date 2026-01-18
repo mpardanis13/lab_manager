@@ -74,3 +74,5 @@ group :development, :test do
   gem 'factory_bot_rails'
   gem 'faker'            # Για τυχαία δεδομένα στα τεστ
 end
+
+gem 'devise'

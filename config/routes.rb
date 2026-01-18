@@ -1,4 +1,6 @@
 Rails.application.routes.draw do
+  get "pages/home"
+  devise_for :users
   # Auth routes
   post 'auth/login', to: 'authentication#authenticate'
   post 'signup', to: 'authentication#signup'
@@ -8,4 +10,5 @@ Rails.application.routes.draw do
   resources :todos do
     resources :items
   end
+  root to: "pages#home"
 end

@@ -1,11 +1,8 @@
 class User < ApplicationRecord
-  # Αυτή η γραμμή ενεργοποιεί την κρυπτογράφηση κωδικού
-  has_secure_password
+  # ΜΟΝΟ οι γραμμές του Devise εδώ:
+  devise :database_authenticatable, :registerable,
+         :recoverable, :rememberable, :validatable
 
-  # Σχέσεις: Ένας χρήστης έχει πολλά todos
+  # Οι σχέσεις σου
   has_many :todos, foreign_key: :created_by
-  
-  # Έλεγχοι: Πρέπει να υπάρχουν πάντα αυτά τα πεδία
-  validates_presence_of :name, :email, :password_digest
-  validates_uniqueness_of :email
 end
