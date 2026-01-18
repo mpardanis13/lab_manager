@@ -1,0 +1,4 @@
+<%= turbo_stream.append "messages", partial: "messages/message", locals: { message: @message, current_user: current_user } %>
+<%= turbo_stream.replace "chat-input" do %>
+  <input type="text" name="message[body]" id="chat-input" placeholder="Γράψτε ένα μήνυμα..." class="form-control rounded-pill border-2 px-3" autocomplete="off">
+<% end %>

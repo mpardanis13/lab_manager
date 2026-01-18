@@ -3,6 +3,7 @@ class Message < ApplicationRecord
   belongs_to :user
   validates_presence_of :body, :conversation_id, :user_id
 
-  # Αυτή η γραμμή κάνει το "μαγικό" της άμεσης εμφάνισης (Hotwire/Turbo)
-  after_create_commit { broadcast_append_to self.conversation }
+  # Εκπέμπουμε το μήνυμα ζωντανά στον recipient. 
+  # Για τον παραλήπτη, το μήνυμα θα εμφανίζεται πάντα αριστερά (mine: false).
+  after_create_commit { broadcast_append_to self.conversation, target: "messages", locals: { mine: false } }
 end

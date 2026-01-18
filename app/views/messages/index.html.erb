@@ -1,0 +1,66 @@
+<div class="row justify-content-center">
+  <div class="col-md-8 col-lg-6">
+    <div class="card shadow-lg border-0 rounded-4 overflow-hidden">
+      
+      <!-- Header -->
+      <div class="card-header bg-primary text-white p-3 d-flex justify-content-between align-items-center">
+        <h5 class="mb-0 fw-bold">
+          <% other_user = @conversation.sender == current_user ? @conversation.recipient : @conversation.sender %>
+          💬 <%= other_user.name.presence || other_user.email %>
+        </h5>
+        <%= link_to "Πίσω", users_path, class: "btn btn-sm btn-light rounded-pill px-3" %>
+      </div>
+
+      <!-- Messages Area -->
+      <div class="card-body p-4 bg-light" id="messages-scroll-container" style="height: 500px; overflow-y: auto;">
+        <%# Ακούμε για νέα μηνύματα από το ActionCable %>
+        <%= turbo_stream_from @conversation %>
+        
+        <div id="messages">
+          <% @messages.each do |msg| %>
+            <%= render partial: 'messages/message', locals: { message: msg, mine: (msg.user == current_user) } %>
+          <% end %>
+        </div>
+      </div>
+
+      <!-- Input Form -->
+      <div class="card-footer bg-white p-3 border-top-0">
+        <%= form_with(model: [@conversation, @message], id: "chat-form", class: "d-flex gap-2") do |f| %>
+          <%= f.text_field :body, 
+                           placeholder: "Γράψτε ένα μήνυμα...", 
+                           class: "form-control rounded-pill border-2 px-3", 
+                           autocomplete: "off",
+                           id: "chat-input-field" %>
+          <%= f.submit "Στείλε", class: "btn btn-primary rounded-pill px-4 fw-bold" %>
+        <% end %>
+      </div>
+      
+    </div>
+  </div>
+</div>
+
+<script>
+  // Λειτουργία για αυτόματο scroll στο τέλος
+  function scrollToBottom() {
+    var container = document.getElementById('messages-scroll-container');
+    if (container) {
+      container.scrollTop = container.scrollHeight;
+    }
+  }
+
+  // Σκρολάρουμε όταν ανοίγει η σελίδα
+  document.addEventListener("turbo:load", scrollToBottom);
+
+  // Καθαρίζουμε το κουτάκι και σκρολάρουμε όταν στέλνουμε μήνυμα
+  document.addEventListener("turbo:submit-end", function(event) {
+    if (event.target.id === "chat-form") {
+      event.target.reset();
+      scrollToBottom();
+    }
+  });
+
+  // Σκρολάρουμε όταν έρχεται νέο μήνυμα "ζωντανά" από τον άλλον
+  document.addEventListener("turbo:before-stream-render", function() {
+    setTimeout(scrollToBottom, 50);
+  });
+</script>

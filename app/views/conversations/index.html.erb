@@ -1,0 +1,47 @@
+<div class="row justify-content-center">
+  <div class="col-md-8">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+      <h2 class="fw-bold m-0 text-primary">Οι Συνομιλίες μου</h2>
+      <span class="badge bg-primary rounded-pill"><%= @conversations.count %></span>
+    </div>
+
+    <% if @conversations.any? %>
+      <div class="list-group shadow-sm rounded-4 overflow-hidden border-0">
+        <% @conversations.each do |conversation| %>
+          <% other_user = conversation.sender == current_user ? conversation.recipient : conversation.sender %>
+          
+          <%= link_to conversation_messages_path(conversation), class: "list-group-item list-group-item-action p-4 border-0 border-bottom d-flex align-items-center" do %>
+            <div class="bg-primary text-white rounded-circle d-flex align-items-center justify-content-center me-4 shadow-sm" style="width: 55px; height: 55px; font-size: 1.2rem; flex-shrink: 0;">
+              <%= (other_user.name.presence || other_user.email)[0].upcase %>
+            </div>
+            
+            <div class="flex-grow-1">
+              <div class="d-flex justify-content-between align-items-center">
+                <h5 class="mb-1 fw-bold text-dark"><%= other_user.name.presence || other_user.email %></h5>
+                <small class="text-muted">
+                  <%= conversation.messages.last&.created_at&.strftime("%H:%M") %>
+                </small>
+              </div>
+              <p class="mb-0 text-muted text-truncate" style="max-width: 300px;">
+                <%= conversation.messages.last&.body || "Ξεκινήστε μια συνομιλία..." %>
+              </p>
+            </div>
+            
+            <div class="ms-3 text-primary">
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-chevron-right" viewBox="0 0 16 16">
+                <path fill-rule="evenodd" d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708"/>
+              </svg>
+            </div>
+          <% end %>
+        <% end %>
+      </div>
+    <% else %>
+      <div class="text-center py-5 bg-white rounded-4 shadow-sm border">
+        <div class="display-1 mb-3">✉️</div>
+        <h4>Δεν έχετε μηνύματα ακόμα</h4>
+        <p class="text-muted">Πηγαίνετε στις επαφές σας για να ξεκινήσετε μια συνομιλία.</p>
+        <%= link_to "Δείτε τους Χρήστες", users_path, class: "btn btn-primary rounded-pill px-4 mt-2" %>
+      </div>
+    <% end %>
+  </div>
+</div>

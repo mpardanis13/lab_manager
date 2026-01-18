@@ -3,8 +3,9 @@ class MessagesController < ApplicationController
   before_action :set_conversation
 
   def index
-    @messages = @conversation.messages
-    @message = @conversation.messages.new
+    # Εμφανίζουμε μόνο τα αποθηκευμένα μηνύματα
+    @messages = @conversation.messages.where.not(id: nil)
+    @message = Message.new
   end
 
   def create
@@ -12,12 +13,18 @@ class MessagesController < ApplicationController
     @message.user = current_user
 
     if @message.save
-      # Θα χρησιμοποιήσουμε Turbo Streams για να μην ανανεώνεται η σελίδα
-      redirect_to conversation_messages_path(@conversation)
+      respond_to do |format|
+        format.turbo_stream do
+          # Εμφανίζουμε το μήνυμα στον εαυτό μας (δεξιά/μπλε)
+          render turbo_stream: turbo_stream.append("messages", partial: "messages/message", locals: { message: @message, mine: true })
+        end
+        format.html { redirect_to conversation_messages_path(@conversation) }
+      end
     end
   end
 
   private
+
   def set_conversation
     @conversation = Conversation.find(params[:conversation_id])
   end

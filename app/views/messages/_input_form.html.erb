@@ -1,0 +1,4 @@
+<%= form_with(model: [conversation, message], id: "chat-input", class: "d-flex gap-2") do |f| %>
+  <%= f.text_field :body, placeholder: "Γράψτε ένα μήνυμα...", class: "form-control rounded-pill border-2 px-3", autocomplete: "off" %>
+  <%= f.submit "Στείλε", class: "btn btn-primary rounded-pill px-4 fw-bold" %>
+<% end %>
