@@ -25,4 +25,15 @@ Rails.application.routes.draw do
   resources :todos do
     resources :items
   end
+
+    resources :conversations do
+    resources :messages
+  end
+
+  # API Routes (κρατάμε αυτά από το Θέμα 2)
+  post 'auth/login', to: 'authentication#authenticate'
+  post 'signup', to: 'authentication#signup'
+  resources :todos do
+    resources :items
+  end
 end
