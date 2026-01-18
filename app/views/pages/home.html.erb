@@ -1,2 +1,57 @@
-<h1>Pages#home</h1>
-<p>Find me in app/views/pages/home.html.erb</p>
+<div class="p-5 mb-4 bg-white rounded-4 shadow-sm border-0 text-center">
+  <div class="container-fluid py-5">
+    <h1 class="display-4 fw-bold text-primary">Καλώς ήρθες στο Lab Portal</h1>
+    <p class="col-md-8 fs-5 mx-auto text-muted mt-3">
+      Ολοκληρωμένο σύστημα διαχείρισης εργαστηριακών ασκήσεων, σύνθεσης ομάδων και άμεσης επικοινωνίας φοιτητών.
+    </p>
+    <% unless user_signed_in? %>
+      <div class="mt-5 d-grid gap-2 d-sm-flex justify-content-sm-center">
+        <%= link_to "Δημιουργία Λογαριασμού", new_user_registration_path, class: "btn btn-primary btn-lg px-5 rounded-pill shadow" %>
+        <%= link_to "Είσοδος", new_user_session_path, class: "btn btn-outline-secondary btn-lg px-5 rounded-pill" %>
+      </div>
+    <% end %>
+  </div>
+</div>
+
+<% if user_signed_in? %>
+  <div class="row g-4 mt-2">
+    <!-- Card 1 -->
+    <div class="col-md-4">
+      <div class="card h-100 border-0 shadow-sm rounded-4 transition-card">
+        <div class="card-body p-4 text-center">
+          <div class="fs-1 mb-3 text-primary">📝</div>
+          <h4 class="fw-bold">Αναρτήσεις</h4>
+          <p class="text-muted">Αναζήτησε post ανά κατηγορία ή δημιούργησε μια νέα ομάδα εργασίας.</p>
+          <%= link_to "Δείτε τα Posts", posts_path, class: "btn btn-primary w-100 rounded-pill mt-2" %>
+        </div>
+      </div>
+    </div>
+
+    <!-- Card 2 -->
+    <div class="col-md-4">
+      <div class="card h-100 border-0 shadow-sm rounded-4">
+        <div class="card-body p-4 text-center">
+          <div class="fs-1 mb-3 text-success">👥</div>
+          <h4 class="fw-bold">Επαφές</h4>
+          <p class="text-muted">Βρες συμφοιτητές σου και πρόσθεσέ τους στις προσωπικές σου επαφές.</p>
+          <%= link_to "Λίστα Χρηστών", users_path, class: "btn btn-success w-100 rounded-pill mt-2 text-white" %>
+        </div>
+      </div>
+    </div>
+
+    <!-- Card 3 -->
+    <div class="col-md-4">
+      <div class="card h-100 border-0 shadow-sm rounded-4 bg-primary text-white">
+        <div class="card-body p-4 text-center">
+          <div class="fs-1 mb-3 text-white">📊</div>
+          <h4 class="fw-bold">Το Προφίλ μου</h4>
+          <div class="mt-4 mb-4">
+             <div class="fs-5"><strong>Αναρτήσεις:</strong> <%= current_user.posts.count %></div>
+             <div class="fs-5"><strong>Επαφές:</strong> <%= current_user.friends.count %></div>
+          </div>
+          <%= link_to "Ρυθμίσεις", edit_user_registration_path, class: "btn btn-light w-100 rounded-pill" %>
+        </div>
+      </div>
+    </div>
+  </div>
+<% end %>

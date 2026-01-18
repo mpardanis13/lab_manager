@@ -1,26 +1,41 @@
-<h2>Log in</h2>
+<div class="row justify-content-center mt-5">
+  <div class="col-md-5">
+    <div class="card shadow-lg border-0 rounded-4">
+      <div class="card-body p-5">
+        <div class="text-center mb-4">
+          <h2 class="fw-bold text-primary">Καλώς Ήρθατε</h2>
+          <p class="text-muted">Συνδεθείτε στο λογαριασμό σας</p>
+        </div>
 
-<%= form_for(resource, as: resource_name, url: session_path(resource_name)) do |f| %>
-  <div class="field">
-    <%= f.label :email %><br />
-    <%= f.email_field :email, autofocus: true, autocomplete: "email" %>
-  </div>
+        <%= form_for(resource, as: resource_name, url: session_path(resource_name)) do |f| %>
+          <div class="form-floating mb-3">
+            <%= f.email_field :email, autofocus: true, autocomplete: "email", class: "form-control", id: "floatingEmail", placeholder: "name@example.com" %>
+            <%= f.label :email, "Email", for: "floatingEmail" %>
+          </div>
 
-  <div class="field">
-    <%= f.label :password %><br />
-    <%= f.password_field :password, autocomplete: "current-password" %>
-  </div>
+          <div class="form-floating mb-3">
+            <%= f.password_field :password, autocomplete: "current-password", class: "form-control", id: "floatingPassword", placeholder: "Password" %>
+            <%= f.label :password, "Κωδικός", for: "floatingPassword" %>
+          </div>
 
-  <% if devise_mapping.rememberable? %>
-    <div class="field">
-      <%= f.check_box :remember_me %>
-      <%= f.label :remember_me %>
+          <% if devise_mapping.rememberable? %>
+            <div class="form-check mb-4">
+              <%= f.check_box :remember_me, class: "form-check-input" %>
+              <%= f.label :remember_me, "Να με θυμάσαι", class: "form-check-label" %>
+            </div>
+          <% end %>
+
+          <div class="d-grid gap-2">
+            <%= f.submit "Είσοδος", class: "btn btn-primary btn-lg rounded-pill shadow-sm" %>
+          </div>
+        <% end %>
+
+        <hr class="my-4">
+
+        <div class="text-center small">
+          <%= render "devise/shared/links" %>
+        </div>
+      </div>
     </div>
-  <% end %>
-
-  <div class="actions">
-    <%= f.submit "Log in" %>
   </div>
-<% end %>
-
-<%= render "devise/shared/links" %>
+</div>

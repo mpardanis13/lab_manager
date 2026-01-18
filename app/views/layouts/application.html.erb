@@ -6,65 +6,64 @@
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
 
-    <!-- Bootstrap 5 CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 
     <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
     <%= javascript_importmap_tags %>
   </head>
 
-  <body>
-    <!-- Navbar -->
-    <nav class="navbar navbar-expand-lg navbar-dark bg-primary mb-4" data-turbo="false">
+  <body class="bg-light">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary shadow-sm mb-4" data-turbo="false">
       <div class="container">
-        <%= link_to 'Lab Portal', root_path, class: "navbar-brand fw-bold" %>
+        <%= link_to 'Lab Portal', root_path, class: "navbar-brand fw-bold fs-3" %>
         
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
           <span class="navbar-toggler-icon"></span>
         </button>
 
         <div class="collapse navbar-collapse" id="navbarNav">
-  <ul class="navbar-nav me-auto">
-    <li class="nav-item">
-      <%= link_to 'Αναρτήσεις', posts_path, class: "nav-link" %>
-    </li>
-    <li class="nav-item">
-  <%= link_to 'Χρήστες', users_path, class: "nav-link" %>
-</li>
-  </ul>
+          <ul class="navbar-nav me-auto">
+            <li class="nav-item">
+              <%= link_to 'Αναρτήσεις', posts_path, class: "nav-link px-3" %>
+            </li>
+            <li class="nav-item">
+              <%= link_to 'Χρήστες', users_path, class: "nav-link px-3" %>
+            </li>
+          </ul>
 
-  <ul class="navbar-nav ms-auto">
-    <% if user_signed_in? %>
-      <li class="nav-item">
-        <span class="nav-link text-white fw-bold"><%= current_user.email %></span>
-      </li>
-      <li class="nav-item">
-        <%= link_to "Logout", destroy_user_session_path, class: "nav-link" %>
-      </li>
-    <% else %>
-      <li class="nav-item">
-        <%= link_to "Login", new_user_session_path, class: "nav-link" %>
-      </li>
-      <li class="nav-item">
-        <%= link_to "Register", new_user_registration_path, class: "nav-link" %>
-      </li>
-    <% end %>
-  </ul>
-</div>
+          <ul class="navbar-nav ms-auto align-items-center">
+            <% if user_signed_in? %>
+              <li class="nav-item me-3">
+                <span class="text-white fw-bold">
+                   👋 <%= current_user.name.presence || current_user.email %>
+                </span>
+              </li>
+              <li class="nav-item">
+                <%= link_to "Logout", destroy_user_session_path, class: "btn btn-outline-light btn-sm" %>
+              </li>
+            <% else %>
+              <li class="nav-item">
+                <%= link_to "Login", new_user_session_path, class: "nav-link" %>
+              </li>
+              <li class="nav-item">
+                <%= link_to "Register", new_user_registration_path, class: "btn btn-light btn-sm ms-lg-2" %>
+              </li>
+            <% end %>
+          </ul>
+        </div>
       </div>
     </nav>
 
-    <!-- Main Content -->
     <div class="container">
       <% if notice %>
-        <div class="alert alert-success alert-dismissible fade show" role="alert">
+        <div class="alert alert-success alert-dismissible fade show shadow-sm" role="alert">
           <%= notice %>
           <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
         </div>
       <% end %>
 
       <% if alert %>
-        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+        <div class="alert alert-danger alert-dismissible fade show shadow-sm" role="alert">
           <%= alert %>
           <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
         </div>
@@ -73,7 +72,6 @@
       <%= yield %>
     </div>
 
-    <!-- Bootstrap JS Bundle -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
   </body>
 </html>

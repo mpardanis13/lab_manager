@@ -1,22 +1,28 @@
 Rails.application.routes.draw do
-  get "users/index"
-  resources :posts
-  get "pages/home"
-  devise_for :users
   # Auth routes
   post 'auth/login', to: 'authentication#authenticate'
   post 'signup', to: 'authentication#signup'
   get 'auth/logout', to: 'authentication#logout'
   
-  # Todos & Items
+  # Devise routes για το Portal
+  devise_for :users
+
+  # Pages
+  root to: "pages#home"
+
+  # Posts
+  resources :posts
+
+  # Users & Friendships
+  resources :users, only: [:index] do
+    member do
+      post :add_friend
+      delete :remove_friend # Προσθέσαμε αυτή τη γραμμή
+    end
+  end
+
+  # Todos API
   resources :todos do
     resources :items
   end
-  root to: "pages#home"
-
-  resources :users, only: [:index] do
-  member do
-    post :add_friend
-  end
-end
 end
