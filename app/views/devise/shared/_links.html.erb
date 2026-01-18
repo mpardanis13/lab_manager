@@ -1,25 +1,69 @@
-<%- if controller_name != 'sessions' %>
-  <span>Έχετε ήδη λογαριασμό; <%= link_to "Είσοδος", new_session_path(resource_name), class: "text-decoration-none fw-bold" %></span><br />
-<% end %>
-
-<%- if devise_mapping.registerable? && controller_name != 'registrations' %>
-  <span>Δεν έχετε λογαριασμό; <%= link_to "Εγγραφή", new_registration_path(resource_name), class: "text-decoration-none fw-bold" %></span><br />
-<% end %>
-
-<%- if devise_mapping.recoverable? && controller_name != 'passwords' && controller_name != 'registrations' %>
-  <%= link_to "Ξεχάσατε τον κωδικό σας;", new_password_path(resource_name), class: "text-muted text-decoration-none d-block mt-2" %>
-<% end %>
-
-<%- if devise_mapping.confirmable? && controller_name != 'confirmations' %>
-  <%= link_to "Δεν λάβατε οδηγίες επιβεβαίωσης;", new_confirmation_path(resource_name) %><br />
-<% end %>
-
-<%- if devise_mapping.lockable? && resource_class.unlock_strategy_enabled?(:email) && controller_name != 'unlocks' %>
-  <%= link_to "Δεν λάβατε οδηγίες ξεκλειδώματος;", new_unlock_path(resource_name) %><br />
-<% end %>
-
-<%- if devise_mapping.omniauthable? %>
-  <%- resource_class.omniauth_providers.each do |provider| %>
-    <%= button_to "Είσοδος με #{OmniAuth::Utils.camelize(provider)}", omniauth_authorize_path(resource_name, provider), data: { turbo: false }, class: "btn btn-outline-dark w-100 mt-2 rounded-pill" %>
+<div class="mt-3">
+  <%# Σύνδεσμος για Είσοδο (αν δεν είμαστε ήδη εκεί) %>
+  <%- if controller_name != 'sessions' %>
+    <div class="text-center mb-2">
+      <span class="text-muted">Έχετε ήδη λογαριασμό;</span>
+      <%= link_to "Είσοδος", new_session_path(resource_name), class: "text-decoration-none fw-bold text-primary" %>
+    </div>
   <% end %>
-<% end %>
+
+  <%# Σύνδεσμος για Εγγραφή (αν επιτρέπεται και δεν είμαστε ήδη εκεί) %>
+  <%- if devise_mapping.registerable? && controller_name != 'registrations' %>
+    <div class="text-center mb-2">
+      <span class="text-muted">Δεν έχετε λογαριασμό;</span>
+      <%= link_to "Εγγραφή", new_registration_path(resource_name), class: "text-decoration-none fw-bold text-primary" %>
+    </div>
+  <% end %>
+
+  <%# Σύνδεσμος για Ξεχασμένο Κωδικό %>
+  <%- if devise_mapping.recoverable? && controller_name != 'passwords' && controller_name != 'registrations' %>
+    <div class="text-center mb-2">
+      <%= link_to "Ξεχάσατε τον κωδικό σας;", new_password_path(resource_name), class: "text-muted text-decoration-none small" %>
+    </div>
+  <% end %>
+
+  <%# Σύνδεσμοι για Επιβεβαίωση (Confirmations) %>
+  <%- if devise_mapping.confirmable? && controller_name != 'confirmations' %>
+    <div class="text-center mb-2">
+      <%= link_to "Δεν λάβατε οδηγίες επιβεβαίωσης;", new_confirmation_path(resource_name), class: "small text-decoration-none" %>
+    </div>
+  <% end %>
+
+  <%# Σύνδεσμοι για Ξεκλείδωμα (Unlocks) %>
+  <%- if devise_mapping.lockable? && resource_class.unlock_strategy_enabled?(:email) && controller_name != 'unlocks' %>
+    <div class="text-center mb-2">
+      <%= link_to "Δεν λάβατε οδηγίες ξεκλειδώματος;", new_unlock_path(resource_name), class: "small text-decoration-none" %>
+    </div>
+  <% end %>
+
+  <%# ΕΝΟΤΗΤΑ SOCIAL LOGIN (Google / Facebook) %>
+  <%- if devise_mapping.omniauthable? %>
+    <div class="mt-4">
+      <div class="position-relative mb-4">
+        <hr>
+        <span class="position-absolute top-50 start-50 translate-middle px-3 bg-white text-muted small">Ή ΣΥΝΔΕΘΕΙΤΕ ΜΕ</span>
+      </div>
+
+      <div class="d-grid gap-2">
+        <%- resource_class.omniauth_providers.each do |provider| %>
+          <%# Ορίζουμε διαφορετικά στυλ ανάλογα με τον πάροχο %>
+          <% provider_name = OmniAuth::Utils.camelize(provider) %>
+          <% btn_class = provider.to_s.include?('google') ? 'btn-outline-danger' : 'btn-outline-primary' %>
+          
+          <%= button_to omniauth_authorize_path(resource_name, provider), 
+              data: { turbo: false }, 
+              class: "btn #{btn_class} btn-lg rounded-pill fw-bold shadow-sm d-flex align-items-center justify-content-center" do %>
+            
+            <% if provider.to_s.include?('google') %>
+              <i class="bi bi-google me-2"></i> Συνέχεια μέσω Google
+            <% elsif provider.to_s.include?('facebook') %>
+              <i class="bi bi-facebook me-2"></i> Συνέχεια μέσω Facebook
+            <% else %>
+              Σύνδεση με <%= provider_name %>
+            <% end %>
+          <% end %>
+        <% end %>
+      </div>
+    </div>
+  <% end %>
+</div>
