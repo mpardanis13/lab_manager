@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  get "users/index"
   resources :posts
   get "pages/home"
   devise_for :users
@@ -12,4 +13,10 @@ Rails.application.routes.draw do
     resources :items
   end
   root to: "pages#home"
+
+  resources :users, only: [:index] do
+  member do
+    post :add_friend
+  end
+end
 end
